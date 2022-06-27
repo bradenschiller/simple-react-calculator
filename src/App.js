@@ -3,11 +3,13 @@ import "./App.css";
 import styled from "styled-components";
 
 const CalculatorInput = styled.input`
-  width: 293px;
+  width: 99%;
   height: 4rem;
   border: none;
   text-align: end;
   font-size: 2rem;
+  color: #fff;
+  background-color: #000;
 `;
 
 const CalculatorNumberContainer = styled.div`
@@ -31,14 +33,9 @@ const NumberBlock = styled.button`
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  border: 0.25px solid black;
+  border: 0.25rem solid black;
+  border-radius: 50%;
 `;
-
-const calculatorNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-// TODO: add function to input numbers
-// TODO: abstract the components
-// TODO: think on how to add each function action type
 
 /*
 [x] Add Function
