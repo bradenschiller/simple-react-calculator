@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import styled from "styled-components";
 
@@ -41,8 +41,8 @@ const calculatorNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 // TODO: think on how to add each function action type
 
 /*
-- Add Function
-- Subtract Function
+[x] Add Function
+[x] Subtract Function
 - Divide Function
 - Multiply Function
 - Equals Actions
@@ -50,35 +50,97 @@ const calculatorNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 */
 
 const App = () => {
-  const [setLastCalculation, lastCalculation] = React.useState(null);
-  const [setCurrentNumber, currentNumber] = React.useState(null);
-  const [setLastNumber, lastNumber] = React.useState(null);
+  const [lastCalculation, setLastCalculation] = useState(null);
+  const [currentNumber, setCurrentNumber] = useState("");
+  const [lastNumber, setLastNumber] = useState(null);
+  const [operation, setOperation] = useState("");
+
+  const evaluate = () => {
+    if (!operation.length) {
+      return null;
+    }
+
+    if (operation === "add") {
+      setOperation("");
+
+      setLastCalculation(String(Number(lastNumber) + Number(currentNumber)));
+
+      return setCurrentNumber(
+        String(Number(lastNumber) + Number(currentNumber))
+      );
+    }
+
+    if (operation === "subtract") {
+      setOperation("");
+
+      setLastCalculation(String(Number(lastNumber) - Number(currentNumber)));
+
+      return setCurrentNumber(
+        String(Number(lastNumber) - Number(currentNumber))
+      );
+    }
+  };
+
+  const addNumbers = () => {
+    setLastNumber(currentNumber);
+    setOperation("add");
+    setCurrentNumber("");
+  };
+
+  const subtractNumbers = () => {
+    setLastNumber(currentNumber);
+    setOperation("subtract");
+    setCurrentNumber("");
+  };
+
+  const inputNumber = (number) => {
+    if (operation.length) {
+      setCurrentNumber(number);
+    }
+
+    if (lastCalculation) {
+      setCurrentNumber(number);
+      return setLastCalculation(null);
+    }
+
+    setCurrentNumber(String(currentNumber) + String(number));
+  };
+
+  const clearInput = () => setCurrentNumber("");
 
   return (
     <>
-      <CalculatorInput type="text" placeholder="0" />
+      <CalculatorInput value={currentNumber} type="text" placeholder="0" />
       <CalculatorNumberContainer>
-        <NumberBlock onClick={() => console.log("AC")}>AC</NumberBlock>
+        <NumberBlock onClick={clearInput}>AC</NumberBlock>
         <NumberBlock>+/-</NumberBlock>
         <NumberBlock>%</NumberBlock>
         <NumberBlock action>/</NumberBlock>
-        <NumberBlock>7</NumberBlock>
-        <NumberBlock>8</NumberBlock>
-        <NumberBlock>9</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("7")}>7</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("8")}>8</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("9")}>9</NumberBlock>
         <NumberBlock action>x</NumberBlock>
-        <NumberBlock>4</NumberBlock>
-        <NumberBlock>5</NumberBlock>
-        <NumberBlock>6</NumberBlock>
-        <NumberBlock action>-</NumberBlock>
-        <NumberBlock>1</NumberBlock>
-        <NumberBlock>2</NumberBlock>
-        <NumberBlock>3</NumberBlock>
-        <NumberBlock action>+</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("4")}>4</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("5")}>5</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("6")}>6</NumberBlock>
+        <NumberBlock onClick={subtractNumbers} action>
+          -
+        </NumberBlock>
+        <NumberBlock onClick={() => inputNumber("1")}>1</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("2")}>2</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("3")}>3</NumberBlock>
+        <NumberBlock onClick={addNumbers} action>
+          +
+        </NumberBlock>
       </CalculatorNumberContainer>
       <CalculatorNumberContainerBottomRow>
-        <NumberBlock expanded>0</NumberBlock>
+        <NumberBlock onClick={() => inputNumber("0")} expanded>
+          0
+        </NumberBlock>
         <NumberBlock>.</NumberBlock>
-        <NumberBlock action>=</NumberBlock>
+        <NumberBlock onClick={evaluate} action>
+          =
+        </NumberBlock>
       </CalculatorNumberContainerBottomRow>
     </>
   );

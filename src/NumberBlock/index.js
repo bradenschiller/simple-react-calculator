@@ -1,4 +1,3 @@
-// action = function add(num, num)
 import styled from "styled-components";
 
 const Block = styled.button`
@@ -13,8 +12,13 @@ const Block = styled.button`
   border: 0.25px solid black;
 `;
 
-const NumberBlock = ({ children, action }) => {
-  <Block onClick={action}>{children}</Block>;
+const handleOnClick = (currentNumber, setCurrentNumber, number) =>
+  setCurrentNumber(`${currentNumber}${number}`);
+
+const NumberBlock = ({ number, setCurrentNumber, currentNumber }) => {
+  <Block onClick={() => handleOnClick(currentNumber, setCurrentNumber, number)}>
+    {number}
+  </Block>;
 };
 
 export default NumberBlock;
