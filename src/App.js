@@ -76,7 +76,39 @@ const App = () => {
         String(Number(lastNumber) - Number(currentNumber))
       );
     }
+
+    if (operation === "multiply") {
+      setOperation("");
+
+      setLastCalculation(String(Number(lastNumber) * Number(currentNumber)));
+
+      return setCurrentNumber(
+        String(Number(lastNumber) * Number(currentNumber))
+      );
+    }
+
+    if (operation === "divide") {
+      setOperation("");
+
+      setLastCalculation(String(Number(lastNumber) / Number(currentNumber)));
+
+      return setCurrentNumber(
+        String(Number(lastNumber) / Number(currentNumber))
+      );
+    }
   };
+
+  /* curried function could be better or just an operation function like
+
+  TODO: Replace action functions with this one function
+
+  const handleActionOnClick = (action) => {
+    setLastNumber(currentNumber);
+    setOperation(action);
+    setCurrentNumber(String(""));
+  };
+
+  */
 
   const addNumbers = () => {
     setLastNumber(currentNumber);
@@ -90,7 +122,23 @@ const App = () => {
     setCurrentNumber("");
   };
 
+  const multiplyNumbers = () => {
+    setLastNumber(currentNumber);
+    setOperation("multiply");
+    setCurrentNumber("");
+  };
+
+  const divideNumbers = () => {
+    setLastNumber(currentNumber);
+    setOperation("divide");
+    setCurrentNumber("");
+  };
+
   const inputNumber = (number) => {
+    if (currentNumber.length >= 9 && !lastCalculation) {
+      return null;
+    }
+
     if (operation.length) {
       setCurrentNumber(number);
     }
@@ -112,11 +160,15 @@ const App = () => {
         <NumberBlock onClick={clearInput}>AC</NumberBlock>
         <NumberBlock>+/-</NumberBlock>
         <NumberBlock>%</NumberBlock>
-        <NumberBlock action>/</NumberBlock>
+        <NumberBlock onClick={divideNumbers} action>
+          /
+        </NumberBlock>
         <NumberBlock onClick={() => inputNumber("7")}>7</NumberBlock>
         <NumberBlock onClick={() => inputNumber("8")}>8</NumberBlock>
         <NumberBlock onClick={() => inputNumber("9")}>9</NumberBlock>
-        <NumberBlock action>x</NumberBlock>
+        <NumberBlock onClick={multiplyNumbers} action>
+          x
+        </NumberBlock>
         <NumberBlock onClick={() => inputNumber("4")}>4</NumberBlock>
         <NumberBlock onClick={() => inputNumber("5")}>5</NumberBlock>
         <NumberBlock onClick={() => inputNumber("6")}>6</NumberBlock>
