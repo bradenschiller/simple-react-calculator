@@ -34,7 +34,7 @@ const NumberBlock = styled.button`
   align-items: center;
   font-size: 2rem;
   border: 0.25rem solid black;
-  border-radius: 50%;
+  border-radius: ${props => (props.expanded ? "4rem" : "50%")};
 `;
 
 const OperationBlock = styled.button`
@@ -55,6 +55,7 @@ const OperationBlock = styled.button`
 const App = () => {
   const [lastCalculation, setLastCalculation] = useState(null);
   const [currentNumber, setCurrentNumber] = useState("");
+  const [visualNumber, setVisualNumber] = useState("");
   const [lastNumber, setLastNumber] = useState(null);
   const [operation, setOperation] = useState("");
   const [inputHighlight, setInputHighlight] = useState("");
@@ -114,6 +115,7 @@ const App = () => {
     setLastNumber(currentNumber);
     setOperation(operation);
     setInputHighlight(operation);
+    setVisualNumber(currentNumber)
     setCurrentNumber("");
   };
 
@@ -128,6 +130,7 @@ const App = () => {
     }
 
     if (operation.length) {
+      setVisualNumber(number)
       setCurrentNumber(number);
       setInputHighlight("");
     }
@@ -137,24 +140,29 @@ const App = () => {
       return setLastCalculation(null);
     }
 
+    setVisualNumber(String(currentNumber) + String(number));
     setCurrentNumber(String(currentNumber) + String(number));
   };
 
   const clearInput = () => setCurrentNumber("");
 
+  const handleAbsClick = () => setCurrentNumber(String(currentNumber * -1))
+
+  const handlePercentClick = () => setCurrentNumber(String(currentNumber / 100))
+
   return (
     <>
-      <CalculatorInput value={currentNumber} type="text" placeholder="0" />
+      <CalculatorInput value={operation.length ? visualNumber : currentNumber} type="text" placeholder="0" />
       <CalculatorNumberContainer>
         <NumberBlock onClick={clearInput}>AC</NumberBlock>
-        <NumberBlock>+/-</NumberBlock>
-        <NumberBlock>%</NumberBlock>
+        <NumberBlock onClick={handleAbsClick}>+/-</NumberBlock>
+        <NumberBlock onClick={handlePercentClick}>%</NumberBlock>
         <OperationBlock
           onClick={() => operationAction("divide")}
           inputHighlight={inputHighlight}
           operation={"divide"}
         >
-          /
+          ÷
         </OperationBlock>
         <NumberBlock onClick={() => inputNumber("7")}>7</NumberBlock>
         <NumberBlock onClick={() => inputNumber("8")}>8</NumberBlock>
