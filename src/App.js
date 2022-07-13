@@ -88,16 +88,20 @@ const App = () => {
   };
 
   const inputNumber = (number) => {
-    if (currentNumber == "Error") {
+    const currentValueIsError = currentNumber === "Error"
+    const numberInpurOverflow = currentNumber.length >= 9 && !lastCalculation
+    const hasOperation = operation.length
+
+    if (currentValueIsError) {
       setCurrentNumber("");
       return setCurrentNumber(number);
     }
 
-    if (currentNumber.length >= 9 && !lastCalculation) {
+    if (numberInpurOverflow) {
       return null;
     }
 
-    if (operation.length) {
+    if (hasOperation) {
       setVisualNumber(number)
       setCurrentNumber(number);
       setInputHighlight("");
