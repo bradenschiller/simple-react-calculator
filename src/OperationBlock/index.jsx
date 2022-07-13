@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { OperationSymbols } from "../Constants";
 
 const Block = styled.button`
   width: ${(props) => (props.expanded ? "200px" : "100px")};
@@ -16,18 +17,11 @@ const Block = styled.button`
   border-radius: 50%;
 `;
 
-const OperationSymbols = {
-  ["ADD"]: "+",
-  ["SUBTRACT"]: "-",
-  ["MULTIPLY"]: "x",
-  ["DIVIDE"]: "/",
-};
+const operationSymbol = (operation) => OperationSymbols[operation];
 
-const operationSymbol = (operation) => operationSymbols[operation];
-
-const OperationBlock = (operation, inputHighlight) => {
+const OperationBlock = (operation, inputHighlight, operationAction) => {
   return (
-    <Block inputHighlight={inputHighlight} operation={operation}>
+    <Block onClick={() => operationAction(operation)} inputHighlight={inputHighlight} operation={operation}>
       {operationSymbol(operation)}
     </Block>
   );
