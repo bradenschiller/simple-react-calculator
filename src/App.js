@@ -4,14 +4,16 @@ import styled from "styled-components";
 import OperationBlock from "./OperationBlock";
 import { OperationTypes } from "./Constants";
 
-const CalculatorInput = styled.input`
-  width: 99%;
-  height: 4rem;
+const CalculatorDisplay = styled.input`
   border: none;
-  text-align: end;
-  font-size: 2rem;
   color: #fff;
   background-color: #000;
+  text-align: right;
+  height: 70px;
+  line-height: 70px;
+  padding: 16px 12px;
+  font-size: 2.5rem;
+  max-width: 375px;
 `;
 
 const CalculatorNumberContainer = styled.div`
@@ -29,7 +31,7 @@ const CalculatorNumberContainerBottomRow = styled.div`
 const NumberBlock = styled.button`
   width: ${(props) => (props.expanded ? "200px" : "100px")};
   height: 100px;
-  background-color: ${(props) => (props.action ? "orange" : "gray")};
+  background-color: ${(props) => (props.isActionButton ? "orange" : "gray")};
   color: white;
   display: flex;
   justify-content: center;
@@ -44,11 +46,11 @@ const App = () => {
   const [currentNumber, setCurrentNumber] = useState("");
   const [visualNumber, setVisualNumber] = useState("");
   const [lastNumber, setLastNumber] = useState(null);
-  const [operation, setOperation] = useState("");
+  const [selectedOperationType, setSelectedOperationType] = useState("");
   const [isHighlighted, setIsHighlighted] = useState("");
 
-  const evaluate = () => {
-    const calculate = (operation) => {
+  const handleEvaluation = () => {
+    const selectedOperationCalculation = (selectedOperationType) => {
       const solutions = {
         ADD: String(Number(lastNumber) + Number(currentNumber)),
         SUBTRACT: String(Number(lastNumber) - Number(currentNumber)),
@@ -56,52 +58,54 @@ const App = () => {
         DIVIDE: String(Number(lastNumber) / Number(currentNumber)),
       };
 
-      return solutions[operation];
+      return solutions[selectedOperationType];
     };
 
-    const handleOperationEvaluation = (operation) => {
-      setOperation("");
-      setLastCalculation(calculate(operation));
-      return setCurrentNumber(calculate(operation));
+    const handleSelectedOperationEvaluation = (selectedOperationType) => {
+      setSelectedOperationType("");
+      setLastCalculation(selectedOperationCalculation(selectedOperationType));
+      return setCurrentNumber(
+        selectedOperationCalculation(selectedOperationType)
+      );
     };
 
-    switch (operation) {
+    switch (selectedOperationType) {
       case OperationTypes.ADD:
-        return handleOperationEvaluation(OperationTypes.ADD);
+        return handleSelectedOperationEvaluation(OperationTypes.ADD);
       case OperationTypes.SUBTRACT:
-        return handleOperationEvaluation(OperationTypes.SUBTRACT);
+        return handleSelectedOperationEvaluation(OperationTypes.SUBTRACT);
       case OperationTypes.MULTIPLY:
-        return handleOperationEvaluation(OperationTypes.MULTIPLY);
+        return handleSelectedOperationEvaluation(OperationTypes.MULTIPLY);
       case OperationTypes.DIVIDE:
-        return handleOperationEvaluation(OperationTypes.DIVIDE);
+        return handleSelectedOperationEvaluation(OperationTypes.DIVIDE);
       default:
         return null;
     }
   };
 
-  const operationAction = (operation) => {
+  const handleOperationOnClick = (selectedOperationType) => {
     setLastNumber(currentNumber);
-    setOperation(operation);
-    setIsHighlighted(operation);
+    setSelectedOperationType(selectedOperationType);
+    setIsHighlighted(selectedOperationType);
     setVisualNumber(currentNumber);
     setCurrentNumber("");
   };
 
   const inputNumber = (number) => {
     const currentValueIsError = currentNumber === "Error";
-    const numberInpurOverflow = currentNumber.length >= 9 && !lastCalculation;
-    const hasOperation = operation.length;
+    const numberInputOverflow = currentNumber.length >= 9 && !lastCalculation;
+    const hasSelectedOperation = selectedOperationType.length;
 
     if (currentValueIsError) {
       setCurrentNumber("");
       return setCurrentNumber(number);
     }
 
-    if (numberInpurOverflow) {
+    if (numberInputOverflow) {
       return null;
     }
 
-    if (hasOperation) {
+    if (hasSelectedOperation) {
       setVisualNumber(number);
       setCurrentNumber(number);
       setIsHighlighted("");
@@ -125,51 +129,52 @@ const App = () => {
 
   return (
     <>
-      <CalculatorInput
-        value={operation.length ? visualNumber : currentNumber}
+      <CalculatorDisplay
+        value={selectedOperationType.length ? visualNumber : currentNumber}
         type="text"
         placeholder="0"
+        readOnly
       />
       <CalculatorNumberContainer>
         <NumberBlock onClick={clearInput}>AC</NumberBlock>
         <NumberBlock onClick={handleAbsClick}>+/-</NumberBlock>
         <NumberBlock onClick={handlePercentClick}>%</NumberBlock>
         <OperationBlock
-          operation={OperationTypes.DIVIDE}
+          selectedOperationType={OperationTypes.DIVIDE}
           isHighlighted={isHighlighted}
-          operationAction={operationAction}
+          handleOperationOnClick={handleOperationOnClick}
         />
         <NumberBlock onClick={() => inputNumber("7")}>7</NumberBlock>
         <NumberBlock onClick={() => inputNumber("8")}>8</NumberBlock>
         <NumberBlock onClick={() => inputNumber("9")}>9</NumberBlock>
         <OperationBlock
-          operation={OperationTypes.MULTIPLY}
+          selectedOperationType={OperationTypes.MULTIPLY}
           isHighlighted={isHighlighted}
-          operationAction={operationAction}
+          handleOperationOnClick={handleOperationOnClick}
         />
         <NumberBlock onClick={() => inputNumber("4")}>4</NumberBlock>
         <NumberBlock onClick={() => inputNumber("5")}>5</NumberBlock>
         <NumberBlock onClick={() => inputNumber("6")}>6</NumberBlock>
         <OperationBlock
-          operation={OperationTypes.SUBTRACT}
+          selectedOperationType={OperationTypes.SUBTRACT}
           isHighlighted={isHighlighted}
-          operationAction={operationAction}
+          handleOperationOnClick={handleOperationOnClick}
         />
         <NumberBlock onClick={() => inputNumber("1")}>1</NumberBlock>
         <NumberBlock onClick={() => inputNumber("2")}>2</NumberBlock>
         <NumberBlock onClick={() => inputNumber("3")}>3</NumberBlock>
         <OperationBlock
-          operation={OperationTypes.ADD}
+          selectedOperationType={OperationTypes.ADD}
           isHighlighted={isHighlighted}
-          operationAction={operationAction}
+          handleOperationOnClick={handleOperationOnClick}
         />
       </CalculatorNumberContainer>
       <CalculatorNumberContainerBottomRow>
         <NumberBlock onClick={() => inputNumber("0")} expanded>
           0
         </NumberBlock>
-        <NumberBlock>.</NumberBlock>
-        <NumberBlock onClick={evaluate} action>
+        <NumberBlock onClick={() => inputNumber(".")}>.</NumberBlock>
+        <NumberBlock onClick={handleEvaluation} isActionButton>
           =
         </NumberBlock>
       </CalculatorNumberContainerBottomRow>

@@ -6,8 +6,8 @@ export const OperationSymbols = {
 };
 
 export const OperationTypes = {
-  ["ADD"]: "ADD",
-  ["SUBTRACT"]: "SUBTRACT",
-  ["MULTIPLY"]: "MULTIPLY",
-  ["DIVIDE"]: "DIVIDE",
+  ADD: "ADD",
+  SUBTRACT: "SUBTRACT",
+  MULTIPLY: "MULTIPLY",
+  DIVIDE: "DIVIDE",
 };

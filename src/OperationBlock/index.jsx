@@ -6,9 +6,9 @@ const Block = styled.button`
   width: ${(props) => (props.expanded ? "200px" : "100px")};
   height: 100px;
   background-color: ${(props) =>
-    props.inputHighlight == props.operation ? "white" : "orange"};
+    props.isHighlighted === props.operationType ? "white" : "orange"};
   color: ${(props) =>
-    props.inputHighlight == props.operation ? "orange" : "white"};
+    props.isHighlighted === props.operationType ? "orange" : "white"};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,16 +17,21 @@ const Block = styled.button`
   border-radius: 50%;
 `;
 
-const operationSymbol = (operation) => OperationSymbols[operation];
+const operationSymbol = (selectedOperationType) =>
+  OperationSymbols[selectedOperationType];
 
-const OperationBlock = ({ operation, isHighlighted, operationAction }) => {
+const OperationBlock = ({
+  selectedOperationType,
+  isHighlighted,
+  handleOperationOnClick,
+}) => {
   return (
     <Block
-      onClick={() => operationAction(operation)}
+      onClick={() => handleOperationOnClick(selectedOperationType)}
       isHighlighted={isHighlighted}
-      operation={operation}
+      operationType={selectedOperationType}
     >
-      {operationSymbol(operation)}
+      {operationSymbol(selectedOperationType)}
     </Block>
   );
 };
