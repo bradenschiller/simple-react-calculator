@@ -45,7 +45,7 @@ const App = () => {
   const [visualNumber, setVisualNumber] = useState("");
   const [lastNumber, setLastNumber] = useState(null);
   const [operation, setOperation] = useState("");
-  const [inputHighlight, setInputHighlight] = useState("");
+  const [isHighlighted, setIsHighlighted] = useState("");
 
   const evaluate = () => {
     const calculate = (operation) => {
@@ -82,7 +82,7 @@ const App = () => {
   const operationAction = (operation) => {
     setLastNumber(currentNumber);
     setOperation(operation);
-    setInputHighlight(operation);
+    setIsHighlighted(operation);
     setVisualNumber(currentNumber);
     setCurrentNumber("");
   };
@@ -104,7 +104,7 @@ const App = () => {
     if (hasOperation) {
       setVisualNumber(number);
       setCurrentNumber(number);
-      setInputHighlight("");
+      setIsHighlighted("");
     }
 
     if (lastCalculation) {
@@ -136,7 +136,7 @@ const App = () => {
         <NumberBlock onClick={handlePercentClick}>%</NumberBlock>
         <OperationBlock
           operation={OperationTypes.DIVIDE}
-          inputHighlight={inputHighlight}
+          isHighlighted={isHighlighted}
           operationAction={operationAction}
         />
         <NumberBlock onClick={() => inputNumber("7")}>7</NumberBlock>
@@ -144,7 +144,7 @@ const App = () => {
         <NumberBlock onClick={() => inputNumber("9")}>9</NumberBlock>
         <OperationBlock
           operation={OperationTypes.MULTIPLY}
-          inputHighlight={inputHighlight}
+          isHighlighted={isHighlighted}
           operationAction={operationAction}
         />
         <NumberBlock onClick={() => inputNumber("4")}>4</NumberBlock>
@@ -152,7 +152,7 @@ const App = () => {
         <NumberBlock onClick={() => inputNumber("6")}>6</NumberBlock>
         <OperationBlock
           operation={OperationTypes.SUBTRACT}
-          inputHighlight={inputHighlight}
+          isHighlighted={isHighlighted}
           operationAction={operationAction}
         />
         <NumberBlock onClick={() => inputNumber("1")}>1</NumberBlock>
@@ -160,7 +160,7 @@ const App = () => {
         <NumberBlock onClick={() => inputNumber("3")}>3</NumberBlock>
         <OperationBlock
           operation={OperationTypes.ADD}
-          inputHighlight={inputHighlight}
+          isHighlighted={isHighlighted}
           operationAction={operationAction}
         />
       </CalculatorNumberContainer>
