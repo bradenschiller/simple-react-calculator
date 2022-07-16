@@ -19,9 +19,13 @@ const Block = styled.button`
 
 const operationSymbol = (operation) => OperationSymbols[operation];
 
-const OperationBlock = (operation, inputHighlight, operationAction) => {
+const OperationBlock = ({ operation, inputHighlight, operationAction }) => {
   return (
-    <Block onClick={() => operationAction(operation)} inputHighlight={inputHighlight} operation={operation}>
+    <Block
+      onClick={() => operationAction(operation)}
+      inputHighlight={inputHighlight}
+      operation={operation}
+    >
       {operationSymbol(operation)}
     </Block>
   );
